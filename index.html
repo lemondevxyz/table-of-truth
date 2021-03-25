@@ -30,7 +30,18 @@
 				</ul>
 			</div>
 			</modal>
-			<!-- -->
+			<!-- This modal is the first step of operation -->
+			<!-- Which is to select the first operation -->
+			<modal id="first" :class="modal !== 'insert' ? 'hide' : ''">
+			<div class="modal-content">
+				<h1>Insert</h1>
+				<ul>
+					<li>
+						<a @click="cases++; modal = ''">New Case</a></li>
+					<li>New Operation</li>
+				</ul>
+			</div>
+			</modal>
 			<table id="app">
 				<!-- Here we have all the cases, and statements -->
 				<thead>
@@ -67,4 +78,5 @@
 			</button>
 			</div>
 		</main>
+	</body>
 </html>
