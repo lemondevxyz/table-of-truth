@@ -57,7 +57,7 @@ function getBoolean(len, num) {
 // called by the main div of the app
 function main() {
 	return {
-		modal: "insert",
+		modal: "",
 		_cases: 2,
 		get cases() {
 			return this._cases;
