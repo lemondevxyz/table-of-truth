@@ -21,34 +21,41 @@
 		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js" integrity="sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v" crossorigin="anonymous" onload="loadKatex()"></script>
 	</head>
 	<body>
-		<table id="app" x-data="main()">
-			<!-- Here we have all the cases, and statements -->
-			<thead>
-				<tr>
-					<td class="id">#</td>
-					<template x-for="(cas, index) in cases">
-						<td :key="index" x-text="'$'+numberToLetter(index)+'$'"></td>
-					</template>
-					<template x-for="(op, index) in operations">
-						<td :key="index" x-text="operationToString(op.type, op.one, op.two)"></td>
-					</template>
-				</tr>
-			</thead>
-			<tbody>
-				<!-- Remember: 2^n is equal to the amount of rows there should be - n represents the amount of cases. -->
-				<!-- Display the normal cases -->
-				<template x-for="(cas, row) in Math.pow(2, cases)">
+		<main x-data="main()">
+			<table id="app">
+				<!-- Here we have all the cases, and statements -->
+				<thead>
 					<tr>
-						<td class="id" x-text="row+1"></td>
-						<template x-for="(cas, index) in cases" :key="index">
-							<td x-text="caseValues[index][row]"></td>
+						<td class="id">#</td>
+						<template x-for="(cas, index) in cases">
+							<td :key="index" x-text="'$'+numberToLetter(index)+'$'"></td>
 						</template>
 						<template x-for="(op, index) in operations">
-							<td :key="index" x-text="operationResult(row, op.type, op.one, op.two)"></td>
+							<td :key="index" x-text="operationToString(op.type, op.one, op.two)"></td>
 						</template>
 					</tr>
-				</template>
-			</tbody>
-		</table>
-	</body>
+				</thead>
+				<tbody>
+					<!-- Remember: 2^n is equal to the amount of rows there should be - n represents the amount of cases. -->
+					<!-- Display the normal cases -->
+					<template x-for="(cas, row) in Math.pow(2, cases)">
+						<tr>
+							<td class="id" x-text="row+1"></td>
+							<template x-for="(cas, index) in cases" :key="index">
+								<td x-text="caseValues[index][row]"></td>
+							</template>
+							<template x-for="(op, index) in operations">
+								<td :key="index" x-text="operationResult(row, op.type, op.one, op.two)"></td>
+							</template>
+						</tr>
+					</template>
+				</tbody>
+			</table>
+			<button class="add">
+				<svg style="width:1em;height:1em" viewBox="0 0 24 24">
+					<path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
+				</svg>
+			</button>
+			</div>
+		</main>
 </html>
