@@ -57,7 +57,14 @@ function getBoolean(len, num) {
 // called by the main div of the app
 function main() {
 	return {
-		cases: 2,
+		modal: "insert",
+		_cases: 2,
+		get cases() {
+			return this._cases;
+		},
+		set cases(value) {
+			this._cases = value;
+		},
 		_cacheValues: null,
 		_oldCases: -1,
 		get caseValues() {
@@ -104,13 +111,4 @@ function main() {
 			},
 		],
 	};
-}
-// loadKatex is executed whenever the katex library is loaded...
-function loadKatex() {
-	renderMathInElement(document.body, {
-		delimiters: [
-			{left: "$", right: "$", display: false},
-			{left: "$$", right: "$$", display: true},
-		],
-	})
 }

@@ -60,5 +60,5 @@ function operationToString(type, one, two) {
 
 	char = " " + char + " ";
 
-	return "$"+numberToLetter(one)+char+numberToLetter(two)+"$";
+	return numberToLetter(one)+char+numberToLetter(two);
 }
