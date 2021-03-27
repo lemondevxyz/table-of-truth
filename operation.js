@@ -1,12 +1,9 @@
 // no enum lamo
-// 0001
-const and = 0x0001; // P ^ q
-// 0010
-const or = 2; // P v q
-// 0100
+const not = 1;
+const and = 2; // P ^ q
+const or = 3; // P v q
 const arrow = 4; // P -> q
-// 1000
-const biarrow = 8; // P <-> q
+const biarrow = 5; // P <-> q
 
 // Remember: order of operations: not, and, or, forward arrow
 function executeOperation(type, one, two) {
@@ -18,6 +15,9 @@ function executeOperation(type, one, two) {
 		throw TypeError;
 	}
 
+	if(type === not) {
+		return !one;
+	}
 	if(type === and) {
 		return one && two;
 	}
@@ -56,6 +56,10 @@ function operationToString(type, one, two) {
 		char = "\\rightarrow";
 	} else if(type === biarrow) {
 		char = "\\leftrightarrow";
+	} else if(type === not) {
+		char = "\\neg";
+		two = one;
+		one = -1;
 	}
 
 	char = " " + char + " ";

@@ -6,6 +6,7 @@ main, body, html {
 
 html {
 	font-size: 24px;
+	overflow: hidden;
 }
 
 #app {
@@ -96,13 +97,19 @@ modal {
 .modal-content {
 	background-color: #f9f9f9;
 	width: 90%;
+	padding: 1rem;
+	padding-top: 0em;
 	height: auto;
+	border-radius: 5px;
+	max-width: 550px;
+	max-height: 400px;
+	overflow-y: scroll;
 }
 
 .modal-content > h1 {
 	text-align: center;
-	font-size: 2rem;
-	padding: 0.5rem 0em;
+	font-size: 1.5rem;
+	padding: 1.5rem 0em;
 	margin: 0em !important;
 	border-bottom: 1px solid rgba(0, 0, 0, 0.12);
 }
@@ -124,4 +131,17 @@ a:visited {
 
 a:hover, a:focus, a:active {
 	opacity: 1.0;
+}
+
+/* fieldset is what couples radio stuff */
+fieldset {
+	border: 0px; 
+}
+
+input:disabled {
+	opacity: 0.54;
+}
+
+input:disabled + field {
+	opacity: 0.54;
 }

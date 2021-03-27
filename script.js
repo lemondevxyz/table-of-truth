@@ -23,6 +23,9 @@ function numberToLetter(num) {
 		throw TypeError;
 	}
 
+	if(num === -1)
+		return "";
+
 	const arr = ["p", "q", "r", "s","t","u","v","w","x","y","z","o","n","m","l","k","j","i","h","g","f","e","d","c","b","a"];
 	return arr[num];
 }
@@ -57,7 +60,16 @@ function getBoolean(len, num) {
 // called by the main div of the app
 function main() {
 	return {
-		modal: "",
+		equal: function(one, two) {
+			return JSON.stringify(one) === JSON.stringify(two);
+		},
+		printModal: function() {
+			console.log(this.modal.one, this.modal.two);
+			console.log(this.equal(this.modal.one, this.modal.two));
+		},
+		modal: {
+			name: "",
+		},
 		_cases: 2,
 		get cases() {
 			return this._cases;
@@ -89,6 +101,11 @@ function main() {
 			return executeOperation(type, onevalue, twovalue);
 		},
 		operations: [
+			{
+				type: not,
+				one: 1,
+				two: 0, // whatever
+			},
 			{
 				type: and,
 				one: 0,
