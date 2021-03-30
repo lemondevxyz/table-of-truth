@@ -7,6 +7,36 @@ function main() {
 		modal: {
 			name: "",
 		},
+		toggleInverse: function(val) {
+			var index = -1;
+			if(val.type === inverse) {
+				index = this.values.indexOf(val);
+				this.values.splice(index, 1);
+
+				return;
+			}
+
+			for(var i=0; i < this.values.length; i++) {
+				var v = this.values[i];
+				if(v.type === inverse && v.value === val) {
+					//console.log(v.value, val)
+					index = i;
+					break;
+				}
+			}
+			if(index >= 0) {
+				// remove it
+				this.values.splice(index, 1);
+			} else {
+				var index = this.values.indexOf(val);
+
+				var newval = createValue(inverse, val, this.allLetters());
+				newval.refresh();
+				console.log(newval);
+
+				this.values.splice(index+1, 0, newval);
+			}
+		},
 		values: [],
 		allLetters: function() {
 			var count = 0;

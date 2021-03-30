@@ -85,7 +85,7 @@
 					<tr>
 						<td class="id">#</td>
 						<template x-for="(val, index) in values">
-							<td :key="index" x-html="katex.renderToString(val.string())"></td>
+							<td :key="index" x-html="katex.renderToString(val.string())"@click="toggleInverse(val)" aria-label="toggle not value" style="cursor: pointer;"></td>
 						</template>
 					</tr>
 				</thead>

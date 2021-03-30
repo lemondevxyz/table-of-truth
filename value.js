@@ -44,8 +44,10 @@ function createValue(type, value, size) {
 			case inverse:
 				{
 					const len = this.value.values.length 
+					this.values = [];
+
 					for(var i=0; i < len; i++) {
-						this.values = !(this.value.values[i]);
+						this.values[i] = !(this.value.values[i]);
 					}
 
 					break;
@@ -63,7 +65,11 @@ function createValue(type, value, size) {
 			case letter:
 				return numberToLetter(this.value);
 			case inverse:
-				return "\lnot " + this.value.string();
+				if(this.value.type === letter) {
+					return "\\lnot " + this.value.string();
+				} else {
+					return "\\lnot (" + this.value.string()+")";
+				}
 		}
 	}
 
