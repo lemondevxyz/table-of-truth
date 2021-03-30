@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta charset="UTF-8">
 		<title>table of truth | جدول الحقيقة</title>
 		<!-- Internal -->
@@ -80,28 +81,30 @@
 				</modal>
 			</template>
 			<!-- Table -->
-			<table id="app">
-				<thead>
-					<tr>
-						<td class="id">#</td>
-						<template x-for="(val, index) in values">
-							<td :key="index" x-html="katex.renderToString(val.string())"@click="toggleInverse(val)" aria-label="toggle not value" style="cursor: pointer;"></td>
-						</template>
-					</tr>
-				</thead>
-				<tbody>
-					<!-- Remember: 2^n is equal to the amount of rows there should be - n represents the amount of cases. -->
-					<!-- Display the normal cases -->
-					<template x-for="(_, row) in Math.pow(2, allLetters())" x-if="allLetters() > 0">
+			<div style="overflow: auto; height: 100%;">
+				<table id="app">
+					<thead>
 						<tr>
-							<td class="id" x-text="row+1"></td>
+							<td class="id">#</td>
 							<template x-for="(val, index) in values">
-								<td :key="index" x-text="val.values[row]"></td>
+								<td :key="index" x-html="katex.renderToString(val.string())"@click="toggleInverse(val)" aria-label="toggle not value" style="cursor: pointer;"></td>
 							</template>
 						</tr>
-					</template>
-				</tbody>
-			</table>
+					</thead>
+					<tbody>
+						<!-- Remember: 2^n is equal to the amount of rows there should be - n represents the amount of cases. -->
+						<!-- Display the normal cases -->
+						<template x-for="(_, row) in Math.pow(2, allLetters())" x-if="allLetters() > 0">
+							<tr>
+								<td class="id" x-text="row+1"></td>
+								<template x-for="(val, index) in values">
+									<td :key="index" x-text="val.values[row]"></td>
+								</template>
+							</tr>
+						</template>
+					</tbody>
+				</table>
+			</div>
 			<button class="add" @click="modal.name = 'insert'">
 				<svg style="width:1em;height:1em" viewBox="0 0 24 24">
 					<path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
