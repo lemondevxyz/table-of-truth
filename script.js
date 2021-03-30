@@ -1,131 +1,53 @@
-// validate throws an error whenever one or two is invalid
-function validate(one, two) {
-	if(one === null || two === null) {
-		throw "one or two is null";
-	}
-
-	if(typeof one != "number" || typeof two != "number") {
-		throw TypeError;
-	}
-
-	return;
-}
-// numberToLetter converts a number to a letter for a case.
-// 0 -> p
-// 1 -> q
-// 2 -> r
-// then it starts opposite of the alphabet. 3 -> z and so on.
-function numberToLetter(num) {
-	if(num === null) {
-		throw "num is null";
-	}
-	if(typeof num!= "number") {
-		throw TypeError;
-	}
-
-	if(num === -1)
-		return "";
-
-	const arr = ["p", "q", "r", "s","t","u","v","w","x","y","z","o","n","m","l","k","j","i","h","g","f","e","d","c","b","a"];
-	return arr[num];
-}
-// getBoolean returns the boolean value for the case.
-function getBoolean(len, num) {
-	validate(len, num);
-
-	const index = len - num;
-	const value = Math.pow(2, index);
-
-	const half = (value / 2); // cause start from 0
-
-	var arr = [];
-	for(var i=0; i < value; i++) {
-		if(i >= half) {
-			arr.push(false);
-		} else {
-			arr.push(true);
-		}
-	}
-
-	if(value == 0) {
-		throw "cannot divide by zero";
-	}
-
-	for(var i=0; i < num; i++) {
-		arr = arr.concat(arr);
-	}
-
-	return arr;
-}
 // called by the main div of the app
 function main() {
 	return {
 		equal: function(one, two) {
 			return JSON.stringify(one) === JSON.stringify(two);
 		},
-		printModal: function() {
-			console.log(this.modal.one, this.modal.two);
-			console.log(this.equal(this.modal.one, this.modal.two));
-		},
 		modal: {
 			name: "",
 		},
-		_cases: 2,
-		get cases() {
-			return this._cases;
-		},
-		set cases(value) {
-			this._cases = value;
-		},
-		_cacheValues: null,
-		_oldCases: -1,
-		get caseValues() {
-			if(this._oldCases != this.cases) {
-				var arr = [];
-				for(var i=0; i < this.cases; i++) {
-					arr[i] = getBoolean(this.cases, i);
+		values: [],
+		allLetters: function() {
+			var count = 0;
+			const values = this.values;
+
+			for(var i=0; i < values.length; i++) {
+				var v = this.values[i];
+				if(v.type === letter) {
+					count++;
 				}
-
-				this._cacheValues = arr;
-				this._oldCases = this.cases;
-
-				return arr;
 			}
 
-			return this._cacheValues;
+			return count;
 		},
-		operationResult: function(row, type, one, two) {
-			const onevalue = this.caseValues[one][row];
-			const twovalue = this.caseValues[two][row];
+		addLetter: function() {
 
-			return executeOperation(type, onevalue, twovalue);
+			const len = this.allLetters()+1;
+			const newval = createValue(letter, this.allLetters(), len);
+
+			this.values.push(newval);
+			this.values.forEach(function(val) {
+				val.size = len;
+				val.refresh();
+			})
+
+			return;
 		},
-		operations: [
-			{
-				type: not,
-				one: 1,
-				two: 0, // whatever
-			},
-			{
-				type: and,
-				one: 0,
-				two: 1, 
-			},
-			{
-				type: or,
-				one: 0,
-				two: 1, 
-			},
-			{
-				type: arrow,
-				one: 0,
-				two: 1, 
-			},
-			{
-				type: biarrow,
-				one: 0,
-				two: 1, 
-			},
-		],
+		addOperation: function(type, one, two) {
+			if(type === null || one === null || two === null) {
+				return;
+			}
+
+			const len = this.allLetters();
+
+			const newval = createValue(type, {one: one.value, two: two.value}, len);
+			newval.refresh();
+
+			this.values.push(newval);
+			console.log(newval.string());
+
+			return;
+		},
 	};
 }

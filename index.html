@@ -4,6 +4,8 @@
 		<meta charset="UTF-8">
 		<title>table of truth | جدول الحقيقة</title>
 		<!-- Internal -->
+		<script type="text/javascript" src="value.js"></script>
+		<script type="text/javascript" src="letter.js"></script>
 		<script type="text/javascript" src="operation.js"></script>
 		<script type="text/javascript" src="script.js"></script>
 
@@ -19,94 +21,82 @@
 	</head>
 	<body>
 		<main x-data="main()">
-			<!-- This modal either inserts a new case or a new operation -->
-			<modal id="insert" :class="modal.name !== 'insert' ? 'hide' : ''">
-			<div class="modal-content">
-				<h1>Insert</h1>
-				<ul>
-					<li>
-						<a @click="cases++; modal.name = ''">New Case</a></li>
-					<li>
-						<a @click="modal.name = 'operation'">New Operation</a>
-					</li>
-				</ul>
-			</div>
-			</modal>
-			<!-- This modal is the first step of operation -->
-			<!-- Which is to select the first operation -->
-			<modal id="first" :class="modal.name !== 'operation' ? 'hide' : ''">
-			<div class="modal-content">
-				<h1>Operation</h1>
-				<p>Operation Type</p>
-				<fieldset>
-					<!-- and -->
-					<field for="and-radio" x-html="katex.renderToString('\\land')"></field>
-					<input type="radio" id="and-radio" name="type" x-on:input="modal.type = 'and'" checked>
-					<!-- or -->
-					<field for="or-radio" x-html="katex.renderToString('\\lor')"></field>
-					<input type="radio" id="or-radio" name="type" x-on:input="modal.type = 'or'">
-					<!-- arrow -->
-					<field for="arrow-radio" x-html="katex.renderToString('\\rightarrow')"></field>
-					<input type="radio" id="arrow-radio" name="type" x-on:input="modal.type = 'arrow'">
-					<!-- biarrow -->
-					<field for="biarrow-radio" x-html="katex.renderToString('\\leftrightarrow')"></field>
-					<input type="radio" id="biarrow-radio" name="type" x-on:input="modal.type = 'biarrow'">
-				</fieldset>
+			<!-- insert modal -->
+			<!-- for new cases only -->
+			<template x-if="modal.name === 'insert'">
+				<modal>
+				<div class="modal-background" @click="modal = {}"></div>
+				<div class="modal-content">
+					<h1>Insert</h1>
+					<ul>
+						<li>
+							<a @click="addLetter(); modal = {}">New Case</a></li>
+						<li>
+							<a @click="modal.name = 'operation'">New Operation</a>
+						</li>
+					</ul>
+				</div>
+				</modal>
+			</template>
+			<!-- this takes cares of new operations -->
+			<template x-if="modal.name === 'operation'">
+				<modal>
+				<div class="modal-background" @click="modal = {}"></div>
+				<div class="modal-content">
+					<h1>Operation</h1>
+					<p>Operation Type</p>
+					<fieldset>
+						<!-- and -->
+						<field for="and-radio" x-html="katex.renderToString('\\land')"></field>
+						<input type="radio" id="and-radio" name="type" x-on:input="modal.type = and">
+						<!-- or -->
+						<field for="or-radio" x-html="katex.renderToString('\\lor')"></field>
+						<input type="radio" id="or-radio" name="type" x-on:input="modal.type = or">
+						<!-- arrow -->
+						<field for="arrow-radio" x-html="katex.renderToString('\\rightarrow')"></field>
+						<input type="radio" id="arrow-radio" name="type" x-on:input="modal.type = arrow">
+						<!-- biarrow -->
+						<field for="biarrow-radio" x-html="katex.renderToString('\\leftrightarrow')"></field>
+						<input type="radio" id="biarrow-radio" name="type" x-on:input="modal.type = biarrow">
+					</fieldset>
 
-				<p>First argument</p>
-				<template x-for="(cas, index) in cases">
-					<div>
-						<input type="radio" name="one" x-on:input="modal.one = {type: 'case', value: cas};" x-bind:disabled="modal.two === {type: 'case', value: cas}">
-						<field x-html="katex.renderToString(numberToLetter(index))"></field>
-					</div>
-				</template>
-				<template x-for="(op, index) in operations">
-					<div>
-						<input type="radio" name="one" x-on:input="modal.one = {type: 'operation', value: op};" x-bind:disabled="equal(modal.two, {type: 'operation', value: op})">
-						<field x-html="katex.renderToString(operationToString(op.type, op.one, op.two))"></field>
-					</div>
-				</template>
-				<p>Second argument</p>
-				<template x-for="(cas, index) in cases">
-					<div>
-						<input type="radio" name="two" x-on:input="modal.two = {type: 'case', value: cas};" x-bind:disabled="equal(modal.one, {type: 'case', value: cas})">
-						<field x-html="katex.renderToString(numberToLetter(index))"></field>
-					</div>
-				</template>
-				<template x-for="(op, index) in operations">
-					<div>
-						<input type="radio" name="two" x-on:input="modal.two = {type: 'operation', value: op};" x-bind:disabled="modal.one === {type: 'operation', value: op}">
-						<field x-html="katex.renderToString(operationToString(op.type, op.one, op.two))"></field>
-					</div>
-				</template>
-				<button @click="printModal">print</button>
-			</div>
-			</modal>
+					<p>First argument</p>
+					<template x-for="(val, index) in values">
+						<div>
+							<input type="radio" name="one" x-on:input="modal.one = val;" x-bind:disabled="equal(modal.two, val)">
+							<field x-html="katex.renderToString(val.string())"></field>
+						</div>
+					</template>
+					<p>Second argument</p>
+					<template x-for="(val, index) in values">
+						<div>
+							<input type="radio" name="two" x-on:input="modal.two = val;" x-bind:disabled="equal(modal.one, val)">
+							<field x-html="katex.renderToString(val.string())"></field>
+						</div>
+					</template>
+					<br>
+					<button @click="addOperation(modal.type, modal.one, modal.two); modal = {}" :disabled="modal.one === undefined || modal.two === undefined || modal.type === undefined">ADD</button>
+				</div>
+				</modal>
+			</template>
 			<!-- Table -->
 			<table id="app">
-				<!-- Here we have all the cases, and statements -->
 				<thead>
 					<tr>
 						<td class="id">#</td>
-						<template x-for="(cas, index) in cases">
-							<td :key="index" x-html="katex.renderToString(numberToLetter(index))"></td>
-						</template>
-						<template x-for="(op, index) in operations">
-							<td :key="index" x-html="katex.renderToString(operationToString(op.type, op.one, op.two))"></td>
+						<template x-for="(val, index) in values">
+							<td :key="index" x-html="katex.renderToString(val.string())"></td>
 						</template>
 					</tr>
 				</thead>
 				<tbody>
 					<!-- Remember: 2^n is equal to the amount of rows there should be - n represents the amount of cases. -->
 					<!-- Display the normal cases -->
-					<template x-for="(cas, row) in Math.pow(2, cases)">
+					<template x-for="(_, row) in Math.pow(2, allLetters())" x-if="allLetters() > 0">
 						<tr>
 							<td class="id" x-text="row+1"></td>
-							<template x-for="(cas, index) in cases" :key="index">
-								<td x-text="caseValues[index][row]"></td>
-							</template>
-							<template x-for="(op, index) in operations">
-								<td :key="index" x-text="operationResult(row, op.type, op.one, op.two)"></td>
+							<template x-for="(val, index) in values">
+								<td :key="index" x-text="val.values[row]"></td>
 							</template>
 						</tr>
 					</template>

@@ -1,10 +1,12 @@
 // no enum lamo
-const not = 1;
-const and = 2; // P ^ q
-const or = 3; // P v q
-const arrow = 4; // P -> q
-const biarrow = 5; // P <-> q
-
+const and = 1; // P ^ q
+const or = 2; // P v q
+const arrow = 3; // P -> q
+const biarrow = 4; // P <-> q
+// isOperation returns true if the type belongs to an operation
+function isOperation(type) {
+	return type === and || type === or || type === arrow || type === biarrow;
+}
 // Remember: order of operations: not, and, or, forward arrow
 function executeOperation(type, one, two) {
 	if(type === null || one === null || two === null) {
@@ -12,12 +14,9 @@ function executeOperation(type, one, two) {
 	}
 
 	if(typeof type !== "number" || typeof one !== "boolean" || typeof two !== "boolean") {
-		throw TypeError;
+		throw "bad type parameters";
 	}
 
-	if(type === not) {
-		return !one;
-	}
 	if(type === and) {
 		return one && two;
 	}
@@ -38,6 +37,8 @@ function executeOperation(type, one, two) {
 
 		return false;
 	}
+
+	throw "bad type not (and, or, arrow, biarrow)";
 }
 // operationtoString returns a string from an operation.
 function operationToString(type, one, two) {
