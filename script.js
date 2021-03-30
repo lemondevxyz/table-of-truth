@@ -41,11 +41,10 @@ function main() {
 
 			const len = this.allLetters();
 
-			const newval = createValue(type, {one: one.value, two: two.value}, len);
+			const newval = createValue(type, {one: one, two: two}, len);
 			newval.refresh();
-
+			//console.log(newval);
 			this.values.push(newval);
-			console.log(newval.string());
 
 			return;
 		},

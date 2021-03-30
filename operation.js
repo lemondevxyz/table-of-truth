@@ -41,9 +41,9 @@ function executeOperation(type, one, two) {
 	throw "bad type not (and, or, arrow, biarrow)";
 }
 // operationtoString returns a string from an operation.
+// where type is the operation type
+// and one and two are strings
 function operationToString(type, one, two) {
-	validate(one, two);
-
 	if(type === null || typeof type != 'number') {
 		throw "type is null or has bad type";
 	}
@@ -65,5 +65,5 @@ function operationToString(type, one, two) {
 
 	char = " " + char + " ";
 
-	return numberToLetter(one)+char+numberToLetter(two);
+	return one+char+two;
 }

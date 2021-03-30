@@ -12,28 +12,29 @@ function createValue(type, value, size) {
 
 	obj.refresh = function() {
 		const type = this.type;
+
+		if(isOperation(type)) {
+			// recursive function
+			const one = this.value.one.values
+			if(one === undefined || one.length === 0) {
+				this.value.one.refresh();
+			}
+
+			const two = this.value.two.values;
+			if(two === undefined || two.length === 0) {
+				this.value.two.refresh();
+			}
+
+			this.values = [];
+			for(var i=0; i < one.length; i++) {
+				var v = executeOperation(type, one[i], two[i]);
+				this.values.push(v);
+			}
+
+			return;
+		}
+
 		switch (type) {
-			case isOperation(type):
-				{
-					const one = getBoolean(this.size, this.value.one);
-					const two = getBoolean(this.size, this.value.two);
-
-					this.values = [];
-					for(var i=0; i < one.length; i++) {
-						var v;
-						try {
-							v = executeOperation(type, one[i], two[i]);
-							this.values.push(v);
-						} catch(e) {
-							console.log("type is", type);
-							console.log("values", e);
-							break;
-						}
-					}
-
-					break;
-				}
-
 			case letter:
 				{
 					this.values = getBoolean(this.size, this.value);
@@ -55,7 +56,7 @@ function createValue(type, value, size) {
 	obj.string = function() {
 		const type = this.type;
 		if(isOperation(type)) {
-			return operationToString(this.type, this.value.one, this.value.two);
+			return operationToString(this.type, this.value.one.string(), this.value.two.string());
 		}
 
 		switch (type) {
