@@ -62,14 +62,21 @@ td:not(:first-child) {
 }
 
 /* fab button */
-.add {
+.fixed {
+	position: fixed;
+	bottom: 1em;
+	width: 95%;
+	left: 2.5%;
+	height: 2em;
+	display: flex;
+	justify-content: space-between;
+}
+
+.icon {
 	width: 2em;
 	height: 2em;
 	font-size: 1em;
-	position: fixed;
 	border-radius: 100%;
-	bottom: 1em;
-	right: 1em;
 	background-color: rebeccapurple;
 	display: flex;
 	align-items: center;
@@ -82,8 +89,14 @@ td:not(:first-child) {
 	outline: none !important;
 }
 
-.add:hover {
+.icon:hover {
 	color: white;
+}
+
+.icon > svg {
+	height: 1em;
+	width: 1em;
+	fill: currentColor;
 }
 /* modal */
 modal {
@@ -131,14 +144,14 @@ modal {
 	display: none;
 }
 
-a {
+a:not(.icon) {
 	color: cadetblue;
 	opacity: 0.7;
 	transition: color 300ms ease-in-out;
 	cursor: pointer;
 }
 
-a:visited {
+a:not(.icon):visited {
 	color: inherit;
 }
 

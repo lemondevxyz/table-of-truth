@@ -7,6 +7,24 @@ function main() {
 		modal: {
 			name: "",
 		},
+		remove: function(index) {
+			const size = this.countRows();
+			const self = this;
+
+			for(var i=this.values.length-1; i >= 0; i--) {
+				const val = this.values[i];
+
+				if(val.dependsOn !== undefined && val.dependsOn.indexOf(index) !== -1) {
+					self.values.splice(i, 1);
+				} else {
+					if(self.values[index] !== undefined) {
+						self.values[index].size = size;
+						self.values[index].refresh();
+					}
+				}
+			};
+			this.values.splice(index, 1);
+		},
 		toggleInverse: function(val) {
 			var index = -1;
 			if(val.type === inverse) {
@@ -26,11 +44,16 @@ function main() {
 			}
 			if(index >= 0) {
 				// remove it
-				this.values.splice(index, 1);
+				this.values.remove(index);
 			} else {
 				var index = this.values.indexOf(val);
 
-				var newval = createValue(inverse, val, this.allLetters());
+				var newval = createValue(inverse, val, this.countRows());
+				newval.dependsOn = [index];
+				if(val.dependsOn !== undefined) {
+					newval.dependsOn = newval.dependsOn.concat(val.dependsOn);
+				}
+
 				newval.refresh();
 				console.log(newval);
 
@@ -38,7 +61,7 @@ function main() {
 			}
 		},
 		values: [],
-		allLetters: function() {
+		countRows: function() {
 			var count = 0;
 			const values = this.values;
 
@@ -53,14 +76,16 @@ function main() {
 		},
 		addLetter: function() {
 
-			const len = this.allLetters()+1;
-			const newval = createValue(letter, this.allLetters(), len);
+			const len = this.countRows()+1;
+			const newval = createValue(letter, this.countRows(), len);
 
 			this.values.push(newval);
-			this.values.forEach(function(val) {
-				val.size = len;
-				val.refresh();
-			})
+			for(var i=0; i < this.values.length; i++) {
+				const v = this.values[i];
+
+				v.size = len;
+				v.refresh();
+			}
 
 			return;
 		},
@@ -69,11 +94,22 @@ function main() {
 				return;
 			}
 
-			const len = this.allLetters();
+			const len = this.countRows();
 
 			const newval = createValue(type, {one: one, two: two}, len);
+			
+			const oneindex = this.values.indexOf(one);
+			const twoindex = this.values.indexOf(two);
+
+			newval.dependsOn = [oneindex, twoindex];
+			if(one.dependsOn !== null) {
+				newval.dependsOn = newval.dependsOn.concat(one.dependsOn);
+			}
+			if(two.dependsOn !== null) {
+				newval.dependsOn = newval.dependsOn.concat(two.dependsOn);
+			}
+
 			newval.refresh();
-			//console.log(newval);
 			this.values.push(newval);
 
 			return;

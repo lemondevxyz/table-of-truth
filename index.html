@@ -87,14 +87,14 @@
 						<tr>
 							<td class="id">#</td>
 							<template x-for="(val, index) in values">
-								<td :key="index" x-html="katex.renderToString(val.string())"@click="toggleInverse(val)" aria-label="toggle not value" style="cursor: pointer;"></td>
+								<td :key="index" x-html="katex.renderToString(val.string())" @click="toggleInverse(val)" x-on:contextmenu="remove(index); return false;" style="cursor: pointer;" title="Left click to create not value. Right click to remove"></td>
 							</template>
 						</tr>
 					</thead>
 					<tbody>
 						<!-- Remember: 2^n is equal to the amount of rows there should be - n represents the amount of cases. -->
 						<!-- Display the normal cases -->
-						<template x-for="(_, row) in Math.pow(2, allLetters())" x-if="allLetters() > 0">
+						<template x-for="(_, row) in Math.pow(2, countRows())" x-if="countRows() > 0">
 							<tr>
 								<td class="id" x-text="row+1"></td>
 								<template x-for="(val, index) in values">
@@ -105,12 +105,19 @@
 					</tbody>
 				</table>
 			</div>
-			<button class="add" @click="modal.name = 'insert'">
-				<svg style="width:1em;height:1em" viewBox="0 0 24 24">
-					<path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
-				</svg>
-			</button>
+			<div class="fixed">
+				<a class="icon" href="https://lemondev.xyz/posts/project-table-of-truth/" target="_blank">
+					<svg viewBox="0 0 24 24">
+						<path fill="currentColor" d="M13,9H11V7H13M13,17H11V11H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />
+					</svg>
+				</a>
+				<button class="icon" @click="modal.name = 'insert'">
+					<svg viewBox="0 0 24 24">
+						<path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
+					</svg>
+				</button>
 			</div>
+			</div>	
 		</main>
 	</body>
 </html>
