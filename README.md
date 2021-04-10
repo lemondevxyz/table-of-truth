@@ -1,2 +1,2 @@
 # table-of-truth
-[demo](https://toms1441.github.io/table-of-truth)
+[demo](https://lemondevxyz.github.io/table-of-truth)
