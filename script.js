@@ -75,9 +75,20 @@ function main() {
 			return count;
 		},
 		addLetter: function() {
-
 			const len = this.countRows()+1;
-			const newval = createValue(letter, this.countRows(), len);
+			var arr = [];
+			for(var i=0; i < len; i++) {
+				arr.push(i);
+			}
+			this.values.forEach(function(v) {
+				if(v.type == letter) {
+					console.log(v.value);
+					arr.splice(v.value, 1);
+				}
+			});
+
+			const val = arr[0];
+			const newval = createValue(letter, val, len);
 
 			this.values.push(newval);
 			for(var i=0; i < this.values.length; i++) {
